@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Deven Goyal Store</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+    }
+
+    .header {
+      background: black;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    .controls {
+      width: 90%;
+      margin: 20px auto;
+      display: flex;
+      gap: 15px;
+    }
+
+    select {
+      padding: 6px;
+      font-size: 14px;
+    }
+
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-spacing: 20px;
+    }
+
+    td {
+      background: white;
+      width: 25%;
+      padding: 15px;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    h3 {
+      margin: 10px 0 5px;
+    }
+
+    .price {
+      color: green;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+
+    .rating {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    button {
+      background: black;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="header">
+  Welcome to Deven Goyal Store
+</div>
+
+<div class="controls">
+  <select id="sortSelect">
+    <option value="">Sort By</option>
+    <option value="price-asc">Price (Low to High)</option>
+    <option value="price-desc">Price (High to Low)</option>
+    <option value="name-asc">Name (A–Z)</option>
+    <option value="name-desc">Name (Z–A)</option>
+    <option value="rating-asc">Rating (Low to High)</option>
+    <option value="rating-desc">Rating (High to Low)</option>
+  </select>
+
+  <select id="categorySelect">
+    <option value="all">All Categories</option>
+    <option value="Electronics">Electronics</option>
+    <option value="Fashion">Fashion</option>
+    <option value="Books">Books</option>
+    <option value="Accessories">Accessories</option>
+  </select>
+</div>
+
+<table>
+  <tr id="productTable"></tr>
+</table>
+
+<script>
+  var products = [
+    { name: "Smartphone", price: 14999, rating: 4.5, category: "Electronics" },
+    { name: "Laptop", price: 55999, rating: 4.7, category: "Electronics" },
+    { name: "Headphones", price: 1999, rating: 4.2, category: "Electronics" },
+    { name: "Smartwatch", price: 2999, rating: 4.0, category: "Electronics" },
+
+    { name: "T-Shirt", price: 499, rating: 4.1, category: "Fashion" },
+    { name: "Jeans", price: 1299, rating: 4.3, category: "Fashion" },
+    { name: "Jacket", price: 2499, rating: 4.4, category: "Fashion" },
+    { name: "Shoes", price: 1999, rating: 4.5, category: "Fashion" },
+
+    { name: "Notebook", price: 299, rating: 3.9, category: "Books" },
+    { name: "Programming Book", price: 799, rating: 4.6, category: "Books" },
+    { name: "Novel", price: 499, rating: 4.2, category: "Books" },
+    { name: "Exam Guide", price: 699, rating: 4.0, category: "Books" },
+
+    { name: "Wallet", price: 399, rating: 4.1, category: "Accessories" },
+    { name: "Belt", price: 299, rating: 3.8, category: "Accessories" },
+    { name: "Backpack", price: 1499, rating: 4.4, category: "Accessories" },
+    { name: "Sunglasses", price: 999, rating: 4.3, category: "Accessories" },
+
+    { name: "Earbuds", price: 2499, rating: 4.5, category: "Electronics" },
+    { name: "Hoodie", price: 1799, rating: 4.2, category: "Fashion" },
+    { name: "Diary", price: 199, rating: 3.7, category: "Books" },
+    { name: "Watch Strap", price: 349, rating: 3.9, category: "Accessories" }
+  ];
+
+  var table = document.getElementById("productTable");
+  var sortSelect = document.getElementById("sortSelect");
+  var categorySelect = document.getElementById("categorySelect");
+
+  function showProducts(list) {
+    table.innerHTML = "";
+
+    for (var i = 0; i < list.length; i++) {
+      var td = document.createElement("td");
+
+      td.innerHTML =
+        "<img src='https://via.placeholder.com/200'>" +
+        "<h3>" + list[i].name + "</h3>" +
+        "<div class='price'>₹" + list[i].price + "</div>" +
+        "<div class='rating'>Rating: " + list[i].rating + "</div>" +
+        "<button>Add to Cart</button>";
+
+      table.appendChild(td);
+    }
+  }
+
+  function applyChanges() {
+    var result = [];
+    var category = categorySelect.value;
+
+    for (var i = 0; i < products.length; i++) {
+      if (category === "all" || products[i].category === category) {
+        result.push(products[i]);
+      }
+    }
+
+    var sort = sortSelect.value;
+
+    if (sort === "price-asc") {
+      result.sort(function(a, b) {
+        return a.price - b.price;
+      });
+    }
+
+    if (sort === "price-desc") {
+      result.sort(function(a, b) {
+        return b.price - a.price;
+      });
+    }
+
+    if (sort === "name-asc") {
+      result.sort(function(a, b) {
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    if (sort === "name-desc") {
+      result.sort(function(a, b) {
+        return b.name.localeCompare(a.name);
+      });
+    }
+
+    if (sort === "rating-asc") {
+      result.sort(function(a, b) {
+        return a.rating - b.rating;
+      });
+    }
+
+    if (sort === "rating-desc") {
+      result.sort(function(a, b) {
+        return b.rating - a.rating;
+      });
+    }
+
+    showProducts(result);
+  }
+
+  sortSelect.onchange = applyChanges;
+  categorySelect.onchange = applyChanges;
+
+  showProducts(products);
+</script>
+
+
+</body>
+</html>
